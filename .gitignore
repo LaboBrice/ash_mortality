@@ -1,0 +1,26 @@
+# Raw data
+raw_data/
+00b_load_data.R
+
+# macOS files
+.DS_Store
+
+# R specific
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# R Environment Variables
+.Renviron
+
+
+# Output files
+output/
+
