@@ -1,6 +1,17 @@
 # Raw data
 raw_data/
-00b_load_data.R
+data/abattage
+data/treazin
+
+# extra nalysis
+R/00b_identify_core_edge.R
+R/00b_load_data.R
+R/00c_density_summary.R
+R/04_ash_mortality_analysis.R
+R/05_treazin_analysis.R
+R/06_ash_removal_analysis.R
+
+
 
 # macOS files
 .DS_Store

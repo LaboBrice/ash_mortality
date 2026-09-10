@@ -5,7 +5,11 @@
 #' Plot Fraxinus Health State by DBH
 #'
 #' Creates a stacked bar chart showing health state proportions across DBH categories
-plot_fraxinus_health <- function(fraxinus_health, label_data = NULL, residual_data = NULL, n_data = NULL) {
+#'
+#' @param fraxinus_health Data frame with DBH and Health columns
+#' @param n_data Optional data frame with DBH and n columns for sample size labels
+#' @return A ggplot object
+plot_fraxinus_health <- function(fraxinus_health, n_data = NULL) {
 
   p <- ggplot(fraxinus_health, aes(x = DBH, fill = factor(Health))) +
     geom_bar(position = "fill") +
@@ -39,9 +43,22 @@ plot_fraxinus_health <- function(fraxinus_health, label_data = NULL, residual_da
 }
 
 
-#' Create Scatter Plot with 1:1 Line
+#' Create Temporal Comparison Scatter Plot
 #'
-#' Creates a scatter plot comparing 2011 vs 2023 values with optional highlighting
+#' Creates a scatter plot comparing 2011 vs 2023 values with a 1:1 reference line
+#' and optional species highlighting
+#'
+#' @param data Data frame containing the data to plot
+#' @param x_col Name of column for x-axis (2011 values)
+#' @param y_col Name of column for y-axis (2023 values)
+#' @param label_col Optional column name for point labels
+#' @param highlight_species Character vector of species to highlight
+#' @param x_label Label for x-axis (default: "2011")
+#' @param y_label Label for y-axis (default: "2023")
+#' @param title Optional plot title
+#' @param x_limit Optional x-axis upper limit
+#' @param y_limit Optional y-axis upper limit
+#' @return A ggplot object
 plot_temporal_scatter <- function(data, x_col, y_col, label_col = NULL,
                                   highlight_species = NULL,
                                   x_label = "2011", y_label = "2023",

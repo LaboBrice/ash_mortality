@@ -5,7 +5,7 @@
 # =============================================================================
 
 # Load setup and data
-source("00_setup.R")
+source("R/00_setup.R")
 
 cat("\n=== CREATING SITE LOCATION MAP ===\n\n")
 
@@ -45,48 +45,50 @@ mtl <- st_transform(mtl, st_crs(sites))
 cat("✓ Montreal boundary loaded\n")
 cat("  Montreal CRS:", st_crs(mtl)$input, "\n\n")
 
-# Download rivers and water bodies from Montreal open data
+# -----------------------------------------------------------------------------
+# 3. DOWNLOAD AND PROCESS RIVER DATA
+# -----------------------------------------------------------------------------
 
-# Load and process river data
-
-download.file(url = "https://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/geobase_nhn_rhn/shp_fr/02/nhn_rhn_0210001_shp_fr.zip",
-destfile = "data/mtl_polygones/nhn_rhn_0210001_shp_fr.zip")
-
-unzip("data/mtl_polygones/nhn_rhn_0210001_shp_fr.zip", exdir = "data/mtl_polygones/RHN")
-
-riv <- read_sf("data/mtl_polygones/RHN/RHN_0210001_3_2_HD_REGIONHYDRO_2.shp") %>%
-  st_transform(st_crs(sites)) %>%
-  dplyr::filter(DEFINITION %in% c(1, 6, 5)) %>%
-  st_union() %>%
-  st_crop(st_buffer(st_union(mtl), 10000))
-
-clear_zip <- function() {
+# Download rivers and water bodies from Natural Resources Canada if not present
+if (!file.exists("data/mtl_polygones/RHN/RHN_0210001_3_2_HD_REGIONHYDRO_2.shp")) {
+  cat("Downloading river data...\n")
+  download.file(
+    url = "https://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/geobase_nhn_rhn/shp_fr/02/nhn_rhn_0210001_shp_fr.zip",
+    destfile = "data/mtl_polygones/nhn_rhn_0210001_shp_fr.zip"
+  )
+  unzip("data/mtl_polygones/nhn_rhn_0210001_shp_fr.zip",
+        exdir = "data/mtl_polygones/RHN")
   unlink("data/mtl_polygones/nhn_rhn_0210001_shp_fr.zip")
 }
 
+# Load and process river data
+riv <- read_sf("data/mtl_polygones/RHN/RHN_0210001_3_2_HD_REGIONHYDRO_2.shp") %>%
+  st_transform(st_crs(sites)) %>%
+  dplyr::filter(DEFINITION %in% c(1, 5, 6)) %>%
+  st_union() %>%
+  st_crop(st_buffer(st_union(mtl), 10000))
+
+cat("✓ River data loaded and processed\n\n")
+
 # -----------------------------------------------------------------------------
-# 3. CREATE MAP
+# 4. CREATE MAP
 # -----------------------------------------------------------------------------
 cat("Creating map...\n")
 
-# Define map extent based on sites with adjustable buffer
-buffer_distance <- 3000  # in meters - adjust this value to zoom in/out
+# Define map extent based on sites with buffer
+buffer_distance <- 3000  # in meters
 sites_bbox <- st_bbox(st_buffer(sites, buffer_distance))
 
-# Create the map
+# Create the map with river layer
 p_map <- ggplot() +
-  # Add Montreal boundary
-  # geom_sf(data = mtl, fill = "grey95", color = "grey50", linewidth = 0.5) +
-# Add river layer
-    geom_sf(data = riv, fill = "lightblue", color = "steelblue", linewidth = 0.3)
+  geom_sf(data = riv, fill = "lightblue", color = "steelblue", linewidth = 0.3)
 
 
-# Create island labels data frame
-# You may need to adjust coordinates based on your CRS
+# Create island labels
 island_labels <- data.frame(
   name = c("Montréal\nIsland", "Bizard\nIsland"),
-  x = c(-73.6, -73.899),  # Longitude - adjust as needed
-  y = c(45.55, 45.491)     # Latitude - adjust as needed
+  x = c(-73.6, -73.899),  # Longitude
+  y = c(45.55, 45.491)     # Latitude
 ) %>%
   st_as_sf(coords = c("x", "y"), crs = 4326) %>%
   st_transform(st_crs(sites))
@@ -129,7 +131,7 @@ p_map <- p_map +
 print(p_map)
 
 # -----------------------------------------------------------------------------
-# 4. CREATE QUEBEC INSET MAP
+# 5. CREATE QUEBEC INSET MAP
 # -----------------------------------------------------------------------------
 
 # Get Quebec boundary
@@ -160,10 +162,8 @@ p_inset <- ggplot() +
 
 
 # -----------------------------------------------------------------------------
-# 5. COMBINE MAIN MAP WITH INSET
+# 6. COMBINE MAIN MAP WITH INSET
 # -----------------------------------------------------------------------------
-
-library(cowplot)
 
 # Combine main map with inset in top left corner
 p_combined <- ggdraw(p_map) +
@@ -173,8 +173,16 @@ p_combined <- ggdraw(p_map) +
 
 print(p_combined)
 
+# -----------------------------------------------------------------------------
+# 7. SAVE OUTPUT
+# -----------------------------------------------------------------------------
+
+# Create output directory if it doesn't exist
+dir.create("output/figures", recursive = TRUE, showWarnings = FALSE)
+
 # Save the combined map
-ggsave("output/figures/site_location_map.png",
+ggsave("output/figures/fig1_location_map.png",
        p_combined, width = 6, height = 6, dpi = 300)
 
-cat("\n✓ Map saved to output/figures/site_location_map.png\n")
+cat("\n✓ Map saved to output/figures/fig1_location_map.png\n")
+cat("\n=== SITE LOCATION MAP COMPLETE ===\n")

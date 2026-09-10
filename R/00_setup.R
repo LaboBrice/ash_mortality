@@ -13,6 +13,7 @@ required_packages <- c(
   "ggplot2",    # Plotting
   "dplyr",      # Data manipulation
   "tidyr",      # Data tidying
+  "lubridate",  # Date manipulation
   "car",        # Statistical tests
   "ggpubr",     # QQ plots
   "BSDA",       # Sign test
@@ -39,6 +40,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(dplyr)
   library(tidyr)
+  library(lubridate)
   library(car)
   library(ggpubr)
   library(BSDA)
@@ -54,7 +56,7 @@ suppressPackageStartupMessages({
 
 # Source all custom functions
 cat("Loading custom functions...\n")
-source("functions/statistical_functions.R")
-source("functions/plotting_functions.R")
+source("R/functions/statistical_functions.R")
+source("R/functions/plotting_functions.R")
 
 cat("\n✓ Setup complete! All packages and functions loaded.\n")

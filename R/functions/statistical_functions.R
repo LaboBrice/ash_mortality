@@ -4,7 +4,15 @@
 
 #' Test Temporal Change (Auto-selects parametric or non-parametric)
 #'
-#' Internal function used by test_top_species
+#' Internal function used by test_top_species. Automatically selects t-test
+#' or sign test based on normality of the data.
+#'
+#' @param x Numeric vector of differences (2023 - 2011)
+#' @param test_type Type of test: "auto" (default), "t.test", or "sign"
+#' @param mu Hypothesized mean difference (default: 0)
+#' @param alternative Alternative hypothesis: "two.sided", "less", or "greater"
+#' @param conf.level Confidence level (default: 0.95)
+#' @return List with test results (test type, statistic, p-value, conf.int)
 test_temporal_change <- function(x, test_type = "auto", mu = 0,
                                  alternative = "two.sided", conf.level = 0.95) {
 
@@ -61,7 +69,15 @@ test_temporal_change <- function(x, test_type = "auto", mu = 0,
 #' Test Top Species Changes
 #'
 #' Tests for significant changes in species abundance between 2011 and 2023
-#' Only tests species present in at least min_prevalence of sites
+#' using paired tests. Only tests species present in at least a minimum
+#' prevalence of sites.
+#'
+#' @param species_totals Data frame with species totals (not used, kept for compatibility)
+#' @param data_2011 Data frame with species abundances in 2011 (sites as rows)
+#' @param data_2023 Data frame with species abundances in 2023 (sites as rows)
+#' @param min_prevalence Minimum proportion of sites where species must be present (default: 0.05)
+#' @param test_type Type of test: "auto" (default), "t.test", or "sign"
+#' @return Data frame with columns: species, test_used, p_value, significant
 test_top_species <- function(species_totals, data_2011, data_2023,
                              min_prevalence = 0.05, test_type = "auto") {
 
@@ -131,12 +147,15 @@ test_top_species <- function(species_totals, data_2011, data_2023,
 #' Calculate Species Totals
 #'
 #' Calculate total counts for each species across all sites in 2011 and 2023
-calculate_species_totals <- function(data_2011, data_2023,
-                                     exclude_cols = c("sitesCode", "Status", "patchID", "patchPosition", "Year")) {
+#'
+#' @param data_2011 Data frame with species abundances in 2011
+#' @param data_2023 Data frame with species abundances in 2023
+#' @return Data frame with columns: SpCodes, Count_2011, Count_2023, Delta
+calculate_species_totals <- function(data_2011, data_2023) {
 
   # Get species columns
-  species_2011 <- setdiff(names(data_2011), exclude_cols)
-  species_2023 <- setdiff(names(data_2023), exclude_cols)
+  species_2011 <- names(data_2011)
+  species_2023 <- names(data_2023)
   all_species <- union(species_2011, species_2023)
 
   # Calculate totals

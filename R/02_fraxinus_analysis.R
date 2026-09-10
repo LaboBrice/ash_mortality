@@ -5,7 +5,7 @@
 # =============================================================================
 
 # Load setup and data
-source("00_setup.R")
+source("R/00_setup.R")
 
 fraxinus_health <- read.csv("data/fraxinus_health_DBH.csv") %>%
   filter(!is.na(DBH)) %>%
@@ -28,6 +28,10 @@ health_summary <- fraxinus_health %>%
   mutate(proportion = count / sum(count))
 
 print(health_summary)
+
+# Create output directories if they don't exist
+dir.create("output/tables", recursive = TRUE, showWarnings = FALSE)
+dir.create("output/figures", recursive = TRUE, showWarnings = FALSE)
 
 # Save summary
 write.csv(health_summary, "output/tables/fraxinus_health_summary.csv", row.names = FALSE)
@@ -99,10 +103,10 @@ n_per_category <- fraxinus_health %>%
 p_health <- plot_fraxinus_health(fraxinus_health, n_data = n_per_category)
 
 # Save plot
-ggsave("output/figures/fraxinus_health_by_dbh.png",
+ggsave("output/figures/fig2_fraxinus_health_by_dbh.png",
        p_health, width = 6, height = 3, dpi = 300)
 
-cat("✓ Plot saved to output/figures/fraxinus_health_by_dbh.png\n")
+cat("✓ Plot saved to output/figures/fig2_fraxinus_health_by_dbh.png\n")
 
 # Display plot
 print(p_health)
