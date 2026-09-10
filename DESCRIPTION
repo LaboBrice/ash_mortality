@@ -1,0 +1,39 @@
+Package: ashmortality
+Title: Urban Forest Temporal Analysis Following Ash Mortality
+Version: 1.0.0
+Authors@R: c(
+    person("Mélanie", "Primeau", role = "aut"),
+    person("Marie-Hélène", "Brice", role = c("aut", "cre"), email = "marie-helene.brice@umontreal.ca"),
+    person("Stéphanie", "Pellerin", role = "aut")
+  )
+Description: Reproducible workflow for analyzing temporal changes in urban
+    forest composition and structure following emerald ash borer invasion
+    in Montreal, Canada (2011-2023). Companion to the manuscript "Growth
+    of co-occurring trees compensates for ash mortality in urban
+    woodlands".
+License: GPL (>= 3)
+URL: https://github.com/LaboBrice/ash_mortality
+BugReports: https://github.com/LaboBrice/ash_mortality/issues
+Depends:
+    R (>= 4.2)
+Imports:
+    BSDA,
+    car,
+    cowplot,
+    dplyr,
+    ggplot2,
+    ggpubr,
+    ggrepel,
+    ggspatial,
+    lubridate,
+    patchwork,
+    readxl,
+    rnaturalearth,
+    rnaturalearthdata,
+    rnaturalearthhires,
+    sf,
+    tidyr,
+    vegan
+Remotes:
+    ropensci/rnaturalearthhires
+Encoding: UTF-8
