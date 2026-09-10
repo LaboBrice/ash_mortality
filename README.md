@@ -27,8 +27,13 @@ This repository contains the complete reproducible workflow for analyzing tempor
 # Navigate to project directory
 setwd("path/to/ash_mortality")
 
+# install pak 
+install.packages("pak")
+
+# install all dependencies using DESCRIPTION
+pak::pak()
+
 # Run the complete analysis workflow
-source("R/00_setup.R")              # Install packages and load functions
 source("R/01_create_site_map.R")    # Create study site map
 source("R/02_fraxinus_analysis.R")  # Analyze ash tree health
 source("R/03_temporal_analysis.R")  # Analyze temporal changes in forest structure
@@ -42,16 +47,15 @@ source("R/03_temporal_analysis.R")  # Analyze temporal changes in forest structu
 
 ## Repository Structure
 
-```
+```sh
 ash_mortality/
-├── R/                                # R analysis scripts (numbered workflow)
-│   ├── 00_setup.R                    # Package installation and custom functions
-│   ├── 01_create_site_map.R          # Study site map generation
-│   ├── 02_fraxinus_analysis.R        # Ash tree health analysis
-│   ├── 03_temporal_analysis.R        # Temporal community analysis
-│   └── functions/                    # Custom R functions
-│       ├── statistical_functions.R   # Statistical testing functions
-│       └── plotting_functions.R      # Visualization functions
+├── R                               # R analysis scripts (numbered workflow) 
+│   ├── 00_setup.R                  # Package installation and custom function 
+│   ├── 01_create_site_map.R        # Study site map generation
+│   ├── 02_fraxinus_analysis.R      # Ash tree health analysis           
+│   ├── 03_temporal_analysis.R      # Temporal community analysis            
+│   ├── fun_plotting.R              # Statistical testing functions  
+│   └── fun_statistical.R           # Visualization functions      
 │
 ├── data/                             # Processed data files (ready for analysis)
 │   ├── fraxinus_health_DBH.csv       # Ash health status by DBH category

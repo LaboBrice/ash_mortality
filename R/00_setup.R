@@ -5,34 +5,6 @@
 # Author: Melanie Primeau, M-H Brice
 # =============================================================================
 
-cat("Installing and loading required packages...\n\n")
-
-# List of required packages
-required_packages <- c(
-  "vegan",      # Community ecology analyses
-  "ggplot2",    # Plotting
-  "dplyr",      # Data manipulation
-  "tidyr",      # Data tidying
-  "lubridate",  # Date manipulation
-  "car",        # Statistical tests
-  "ggpubr",     # QQ plots
-  "BSDA",       # Sign test
-  "ggrepel",    # Text labels for plots
-  "patchwork", "cowplot",  # Combine plots
-  "readxl",     # Read Excel files
-  "sf",         # Spatial features
-  "ggspatial",  # Spatial plotting
-  "rnaturalearth",  # Natural Earth map data
-  "rnaturalearthdata"  # Natural Earth data
-)
-
-# Install missing packages
-new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
-if(length(new_packages) > 0) {
-  cat("Installing packages:", paste(new_packages, collapse = ", "), "\n")
-  install.packages(new_packages, dependencies = TRUE)
-}
-
 # Load all packages
 cat("\nLoading packages...\n")
 suppressPackageStartupMessages({
@@ -56,7 +28,7 @@ suppressPackageStartupMessages({
 
 # Source all custom functions
 cat("Loading custom functions...\n")
-source("R/functions/statistical_functions.R")
-source("R/functions/plotting_functions.R")
+source("R/fun_statistical.R")
+source("R/fun_plotting.R")
 
 cat("\n✓ Setup complete! All packages and functions loaded.\n")
