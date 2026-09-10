@@ -2,7 +2,7 @@
 
 > Analysis of tree community dynamics in urban woodlands following ash mortality (2011-2023)
 
-**Associated Manuscript**: Growth of co-occurring trees compensates for ash mortality in urban woodlands
+**Associated Manuscript**: Growth of co-occurring trees compensates for ash decline in urban woodlands
 
 **Authors**: Mélanie Primeau, Marie-Hélène Brice, Stéphanie Pellerin
 
